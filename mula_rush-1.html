@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mula Rush: Billionaire Island</title>
+<style>
+:root{--bg:#10132b;--panel:#1c2144;--panel2:#252b56;--gold:#ffd54a;--mint:#64f5b0;--pink:#ff73c8;--text:#f7f8ff;--muted:#b8c0e7}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#343b7c 0,#151936 48%,#0b0e20 100%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+button{font:inherit;cursor:pointer;border:0;border-radius:14px;padding:12px 15px;font-weight:800;color:#201735;background:linear-gradient(135deg,#ffe777,#ffb52f);box-shadow:0 4px 0 #a96719;transition:transform .08s,filter .15s}button:active{transform:translateY(3px);box-shadow:0 1px 0 #a96719}button:disabled{filter:grayscale(.7);opacity:.5;cursor:not-allowed}
+header{padding:18px 14px 12px;text-align:center}header h1{font-size:clamp(28px,7vw,46px);margin:0;color:var(--gold);letter-spacing:1px;text-shadow:0 4px 0 #7d4c20}header p{margin:5px 0;color:var(--muted)}
+.wrap{max-width:1000px;margin:auto;padding:0 12px 28px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.stat,.panel{background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid #414b87;border-radius:18px;padding:13px;box-shadow:0 8px 20px #05071766}.stat span{display:block;font-size:12px;color:var(--muted)}.stat strong{display:block;font-size:clamp(15px,4vw,23px);margin-top:3px;overflow-wrap:anywhere}
+.layout{display:grid;grid-template-columns:1fr;gap:12px}.island{min-height:235px;text-align:center;position:relative;overflow:hidden;background:linear-gradient(#72d9ff 0%,#b6f0ff 56%,#6bd88c 57%,#2f9b60 100%);border:3px solid #a3f5dc;border-radius:24px;padding:18px;color:#14314b}.sun{position:absolute;right:22px;top:16px;width:47px;height:47px;background:#fff4a1;border-radius:50%;box-shadow:0 0 35px #fff3a1}.cloud{position:absolute;font-size:28px;opacity:.8}.island h2{position:relative;margin:0;font-size:24px}.island p{position:relative;margin:5px}.island-art{font-size:76px;line-height:1.25;filter:drop-shadow(0 5px 1px #174a43)}.island button{position:relative;background:linear-gradient(135deg,#fff27c,#ffb62e);font-size:17px;padding:15px 22px}.island .hint{font-size:12px;color:#174a43;font-weight:700}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 10px}.section-title h2{font-size:19px;margin:0}.section-title small{color:var(--muted)}
+.tabs{display:flex;gap:7px;overflow-x:auto;padding:2px 2px 9px}.tabs button{white-space:nowrap;background:#303762;color:white;box-shadow:none;border:1px solid #505b94;padding:10px 13px}.tabs button.active{background:var(--gold);color:#201735}
+.items{display:grid;grid-template-columns:1fr;gap:9px}.item{display:flex;align-items:center;gap:12px;padding:12px;background:#151a37;border:1px solid #394477;border-radius:16px}.emoji{font-size:34px;width:48px;text-align:center;flex-shrink:0}.info{flex:1;min-width:0}.info h3{margin:0 0 3px;font-size:15px}.info p{margin:0;color:var(--muted);font-size:12px}.item button{padding:10px;font-size:12px;min-width:94px}.item button span{display:block;font-size:10px;font-weight:600}
+.notice{min-height:24px;text-align:center;color:var(--mint);font-weight:800;margin:10px 0}.bottom-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.bottom-actions button{flex:1;min-width:130px}.secondary{background:#394477;color:white;box-shadow:0 4px 0 #20264b}.danger{background:#ff8e9a;box-shadow:0 4px 0 #9d4052}.progress{height:10px;background:#0b0e20;border-radius:10px;overflow:hidden;margin-top:8px}.progress div{height:100%;width:0;background:linear-gradient(90deg,var(--mint),var(--gold));transition:width .2s}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:18px 8px}
+#toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#fff;color:#15152a;padding:11px 16px;border-radius:14px;font-weight:800;box-shadow:0 8px 30px #0008;z-index:10;max-width:90vw;text-align:center;display:none}
+@media(min-width:720px){.layout{grid-template-columns:1fr 1fr}.items{grid-template-columns:1fr 1fr}.island{min-height:100%}.island-art{font-size:90px}.stats{gap:12px}.stat{padding:17px}}
+</style>
+</head>
+<body>
+<header><h1>💰 MULA RUSH</h1><p>Billionaire Island · Build your money empire!</p></header>
+<div class="wrap">
+  <section class="stats">
+    <div class="stat"><span>💰 YOUR MONEY</span><strong id="coins">100</strong></div>
+    <div class="stat"><span>⚡ INCOME / SEC</span><strong id="income">0</strong></div>
+    <div class="stat"><span>♻️ REBIRTHS</span><strong id="rebirths">0</strong></div>
+  </section>
+  <div class="layout">
+    <section class="panel">
+      <div class="section-title"><h2>🏝️ Your Island</h2><small id="islandName">Starter Island</small></div>
+      <div class="island">
+        <div class="sun"></div><div class="cloud" style="left:18px;top:30px">☁️</div><div class="cloud" style="left:68%;top:65px">☁️</div>
+        <h2 id="islandHeading">Starter Island</h2><p>Tap to collect money!</p>
+        <div class="island-art" id="islandArt">🏝️</div>
+        <button id="collectBtn">💰 COLLECT +10</button>
+        <p class="hint">Every tap earns coins. Machines earn while you play.</p>
+      </div>
+      <div class="notice" id="notice" aria-live="polite">Welcome, future billionaire!</div>
+      <div class="section-title"><h2>📈 Next milestone</h2><small id="milestoneText">Reach 1,000 coins</small></div>
+      <div class="progress"><div id="progressBar"></div></div>
+      <div class="bottom-actions">
+        <button class="secondary" id="soundBtn">🔊 Sound: ON</button>
+        <button class="secondary" id="saveBtn">💾 Save now</button>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="section-title"><h2>🏭 Business Shop</h2><small>Buy & earn</small></div>
+      <div class="tabs" id="tabs">
+        <button class="active" data-tab="business">🏭 Businesses</button>
+        <button data-tab="islands">🌎 Islands</button>
+        <button data-tab="pets">🐾 Pets</button>
+      </div>
+      <div class="items" id="items"></div>
+    </section>
+  </div>
+  <section class="panel" style="margin-top:12px">
+    <div class="section-title"><h2>👑 Empire controls</h2><small>Reset or level up</small></div>
+    <p style="color:var(--muted);font-size:13px;margin-top:0">Rebirth restarts your coins and businesses but gives a permanent income multiplier. You need 1,000,000 coins to rebirth.</p>
+    <div class="bottom-actions">
+      <button id="rebirthBtn">♻️ Rebirth (1M coins)</button>
+      <button class="secondary" id="musicBtn">🎵 Music: OFF</button>
+      <button class="danger" id="resetBtn">🗑️ New Game</button>
+    </div>
+  </section>
+</div>
+<footer>Made for fun. Game coins are fictional and have no real cash value. Progress is saved in this browser when storage is available.</footer>
+<div id="toast" role="status"></div>
+<script>
+(() => {
+"use strict";
+const businesses = [
+ {name:"Lemonade Stand",emoji:"🍋",base:100,rate:2,desc:"Your first little business."},
+ {name:"Small Factory",emoji:"🏭",base:500,rate:10,desc:"Build things and earn coins."},
+ {name:"Pizza Shop",emoji:"🍕",base:2500,rate:45,desc:"Everybody loves pizza."},
+ {name:"Bank",emoji:"🏦",base:12000,rate:180,desc:"Money makes more money."},
+ {name:"Rocket Company",emoji:"🚀",base:60000,rate:850,desc:"Take your empire into space."},
+ {name:"Mega Corporation",emoji:"🏙️",base:300000,rate:4000,desc:"A giant business empire."},
+ {name:"Moon Mining",emoji:"🌕",base:1500000,rate:18000,desc:"Mine valuable moon rocks."},
+ {name:"Galaxy HQ",emoji:"🌌",base:9000000,rate:100000,desc:"Your empire spans the galaxy."}
+];
+const islands = [
+ {name:"Starter Island",emoji:"🏝️",cost:0,mult:1,desc:"Your home base."},
+ {name:"Desert Island",emoji:"🏜️",cost:10000,mult:1.5,desc:"Hot sands, bigger profits."},
+ {name:"Lava Island",emoji:"🌋",cost:250000,mult:2.5,desc:"A fiery business frontier."},
+ {name:"Space Island",emoji:"🪐",cost:5000000,mult:5,desc:"Build beyond Earth."},
+ {name:"Galaxy Island",emoji:"🌌",cost:100000000,mult:12,desc:"The ultimate destination."}
+];
+const pets = [
+ {name:"Coin Cat",emoji:"🐱",cost:1000,bonus:0.05,desc:"+5% total income."},
+ {name:"Lucky Dog",emoji:"🐶",cost:10000,bonus:0.15,desc:"+15% total income."},
+ {name:"Golden Dragon",emoji:"🐉",cost:250000,bonus:0.5,desc:"+50% total income."},
+ {name:"Space Unicorn",emoji:"🦄",cost:5000000,bonus:1,desc:"+100% total income."}
+];
+const defaults = () => ({coins:100,owned:Array(businesses.length).fill(0),unlocked:[0],island:0,pets:[],rebirths:0,sound:true,music:false});
+let state = defaults(), tab = "business", audioCtx = null, musicTimer = null, musicStep = 0, toastTimer;
+const $ = id => document.getElementById(id);
+const fmt = n => Math.floor(n).toLocaleString("en-US");
+const mult = () => islands[state.island].mult * (1 + state.rebirths * .5) * (1 + state.pets.reduce((s,i)=>s+pets[i].bonus,0));
+const baseIncome = () => state.owned.reduce((sum,n,i)=>sum+n*businesses[i].rate,0);
+const income = () => baseIncome()*mult();
+function toast(msg){$("toast").textContent=msg;$("toast").style.display="block";clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").style.display="none",2100);$("notice").textContent=msg;}
+function sound(type){
+ if(!state.sound)return;
+ try{
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+  if(!audioCtx)audioCtx=new AC();if(audioCtx.state==="suspended")audioCtx.resume();
+  const now=audioCtx.currentTime;
+  const notes=type==="buy"?[660,880,1100]:type==="rebirth"?[330,494,660,990]:type==="pet"?[523,784,1047]:[880,1175];
+  notes.forEach((hz,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type==="buy"?"triangle":"sine";o.frequency.setValueAtTime(hz,now+i*.075);g.gain.setValueAtTime(.0001,now+i*.075);g.gain.exponentialRampToValueAtTime(.12,now+i*.075+.015);g.gain.exponentialRampToValueAtTime(.0001,now+i*.075+.14);o.connect(g);g.connect(audioCtx.destination);o.start(now+i*.075);o.stop(now+i*.075+.16);});
+ }catch(e){}
+}
+function startMusic(){
+ stopMusic();
+ try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC){toast("This browser does not support generated music.");return;}if(!audioCtx)audioCtx=new AC();audioCtx.resume();state.music=true;const scale=[523.25,659.25,783.99,659.25,587.33,698.46,880,698.46];musicStep=0;
+ musicTimer=setInterval(()=>{if(!state.music||!state.sound)return;try{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type="sine";o.frequency.value=scale[musicStep++%scale.length];g.gain.value=.025;o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+.16);}catch(e){}},260);
+ }catch(e){state.music=false;}
+}
+function stopMusic(){if(musicTimer)clearInterval(musicTimer);musicTimer=null;state.music=false;}
+function price(i){return Math.floor(businesses[i].base*Math.pow(1.16,state.owned[i]));}
+function update(){
+ $("coins").textContent=fmt(state.coins);$("income").textContent=fmt(income());$("rebirths").textContent=state.rebirths;
+ $("islandName").textContent=islands[state.island].name;$("islandHeading").textContent=islands[state.island].name;$("islandArt").textContent=islands[state.island].emoji;
+ $("soundBtn").textContent=state.sound?"🔊 Sound: ON":"🔇 Sound: OFF";$("musicBtn").textContent=state.music?"🎵 Music: ON":"🎵 Music: OFF";
+ const target=Math.max(1000,Math.pow(10,Math.floor(Math.log10(Math.max(1,state.coins)))+1));
+ $("milestoneText").textContent="Reach "+fmt(target)+" coins";$("progressBar").style.width=Math.min(100,state.coins/target*100)+"%";
+ renderItems();
+}
+function renderItems(){
+ const root=$("items");
+ if(tab==="business"){
+ root.innerHTML=businesses.map((b,i)=>{const p=price(i),can=state.coins>=p;return `<article class="item"><div class="emoji">${b.emoji}</div><div class="info"><h3>${b.name} <small>×${state.owned[i]}</small></h3><p>+${fmt(b.rate*mult())}/sec each</p><p>${b.desc}</p></div><button data-buy="${i}" ${can?"":"disabled"}>BUY<span>${fmt(p)} coins</span></button></article>`}).join("");
+ root.querySelectorAll("[data-buy]").forEach(btn=>btn.addEventListener("click",()=>buyBusiness(Number(btn.dataset.buy))));
+ }else if(tab==="islands"){
+ root.innerHTML=islands.map((x,i)=>{const own=state.unlocked.includes(i),active=state.island===i,can=state.coins>=x.cost;return `<article class="item"><div class="emoji">${x.emoji}</div><div class="info"><h3>${x.name}</h3><p>Income multiplier ×${x.mult}</p><p>${x.desc}</p></div><button data-island="${i}" ${active||(!own&&!can)?"disabled":""}>${active?"CURRENT":own?"TRAVEL": "UNLOCK"}<span>${own?"Owned":fmt(x.cost)+" coins"}</span></button></article>`}).join("");
+ root.querySelectorAll("[data-island]").forEach(btn=>btn.addEventListener("click",()=>chooseIsland(Number(btn.dataset.island))));
+ }else{
+ root.innerHTML=pets.map((p,i)=>{const own=state.pets.includes(i),can=state.coins>=p.cost;return `<article class="item"><div class="emoji">${p.emoji}</div><div class="info"><h3>${p.name} ${own?"✓":""}</h3><p>${p.desc}</p><p>${own?"Already adopted":"A loyal money helper."}</p></div><button data-pet="${i}" ${own||!can?"disabled":""}>${own?"OWNED":"ADOPT"}<span>${fmt(p.cost)} coins</span></button></article>`}).join("");
+ root.querySelectorAll("[data-pet]").forEach(btn=>btn.addEventListener("click",()=>buyPet(Number(btn.dataset.pet))));
+ }
+}
+function buyBusiness(i){const p=price(i);if(state.coins<p){toast("Not enough coins yet!");return;}state.coins-=p;state.owned[i]++;sound("buy");toast("Bought "+businesses[i].name+"!");update();save(false);}
+function chooseIsland(i){if(!state.unlocked.includes(i)){if(state.coins<islands[i].cost){toast("You need more coins to unlock this island.");return;}state.coins-=islands[i].cost;state.unlocked.push(i);toast("Unlocked "+islands[i].name+"!");sound("buy");}else{toast("Travelled to "+islands[i].name+"!");sound("buy");}state.island=i;update();save(false);}
+function buyPet(i){const p=pets[i];if(state.pets.includes(i)||state.coins<p.cost)return;state.coins-=p.cost;state.pets.push(i);sound("pet");toast("You adopted "+p.name+"!");update();save(false);}
+function save(show=true){try{localStorage.setItem("mulaRushSaveV1",JSON.stringify(state));if(show)toast("Game saved on this device!");}catch(e){if(show)toast("Save unavailable in this browser.");}}
+function load(){try{const raw=localStorage.getItem("mulaRushSaveV1");if(!raw)return;const d=JSON.parse(raw);if(!d||!Number.isFinite(d.coins)||!Array.isArray(d.owned)||d.owned.length!==businesses.length)return;state={...defaults(),...d};state.coins=Math.max(0,d.coins);state.owned=businesses.map((_,i)=>Math.max(0,Math.floor(Number(d.owned[i])||0)));state.unlocked=[...new Set([0,...(Array.isArray(d.unlocked)?d.unlocked.filter(i=>Number.isInteger(i)&&i>=0&&i<islands.length):[])])];state.island=state.unlocked.includes(d.island)?d.island:0;state.pets=Array.isArray(d.pets)?d.pets.filter(i=>Number.isInteger(i)&&i>=0&&i<pets.length):[];state.rebirths=Math.max(0,Math.floor(Number(d.rebirths)||0));state.sound=d.sound!==false;state.music=false;}catch(e){state=defaults();}}
+function rebirth(){if(state.coins<1000000){toast("You need 1,000,000 coins to rebirth!");return;}if(!confirm("Rebirth now? Your coins and businesses reset, but your permanent income multiplier increases."))return;state.coins=100;state.owned=Array(businesses.length).fill(0);state.unlocked=[0];state.island=0;state.pets=[];state.rebirths++;sound("rebirth");toast("REBIRTH! Permanent income bonus increased!");update();save(false);}
+function reset(){if(!confirm("Start a completely new game? This deletes this game's saved progress."))return;stopMusic();state=defaults();try{localStorage.removeItem("mulaRushSaveV1");}catch(e){}toast("New game started!");update();}
+$("collectBtn").addEventListener("click",()=>{state.coins+=10;sound("coin");update();});
+$("saveBtn").addEventListener("click",()=>save(true));
+$("soundBtn").addEventListener("click",()=>{state.sound=!state.sound;if(!state.sound)stopMusic();else sound("coin");update();save(false);});
+$("musicBtn").addEventListener("click",()=>{if(state.music){stopMusic();toast("Music turned off.");}else if(state.sound){startMusic();toast("Music turned on!");}else{toast("Turn sound on first.");}update();save(false);});
+$("rebirthBtn").addEventListener("click",rebirth);$("resetBtn").addEventListener("click",reset);
+$("tabs").querySelectorAll("button").forEach(btn=>btn.addEventListener("click",()=>{tab=btn.dataset.tab;$("tabs").querySelectorAll("button").forEach(b=>b.classList.toggle("active",b===btn));renderItems();}));
+load();update();
+setInterval(()=>{state.coins+=income();update();},1000);
+setInterval(()=>save(false),15000);
+window.addEventListener("pagehide",()=>save(false));
+})();
+</script>
+</body>
+</html>
